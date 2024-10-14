@@ -22,7 +22,8 @@ public class Partie {
     }
 
     public static Partie create(Joueur joueur, String motADeviner, int nbEssais) {
-        return new Partie(joueur, motADeviner, nbEssais, false);
+        boolean terminee = nbEssais>=NB_ESSAIS_MAX;
+        return new Partie(joueur, motADeviner, nbEssais, terminee);
     }
 
     // getter joueur
@@ -48,25 +49,24 @@ public class Partie {
     public Reponse tourDeJeu(String motPropose) {
         nbEssais++;
         verifieNbEssais();
+
+        if(partieTerminee) return new Reponse(motPropose);
+
         MotSecret motSecret = new MotSecret(motADeviner);
         Reponse reponse = motSecret.compareProposition(motPropose);
         if(reponse.lettresToutesPlacees())
-            done();
+            partieTerminee = true;
         return reponse;
     }
 
     // vérifie que le nombre d'essais max n'est pas atteint
     private void verifieNbEssais() {
-        if (nbEssais==NB_ESSAIS_MAX) done();
+        if (nbEssais>=NB_ESSAIS_MAX)
+            partieTerminee = true;
     }
 
     // la partie est-elle terminée
     public boolean isTerminee() {
         return partieTerminee;
-    }
-
-    // la partie est terminée
-    void done() {
-        partieTerminee = true;
     }
 }

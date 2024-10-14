@@ -7,7 +7,6 @@ import static java.util.Collections.unmodifiableList;
 public class Reponse {
     private final String motSecret;
     private final List<Lettre> resultat = new ArrayList<>();
-    private int position;
 
     public Reponse(String mot) {
         this.motSecret = mot;
@@ -21,8 +20,8 @@ public class Reponse {
     // on construit le résultat en analysant chaque lettre
     // du mot proposé
     public void compare(String essai) {
-        for (position = 0; position < essai.length(); Reponse.this.position++) {
-            resultat.add(evaluationCaractere(essai.charAt(position)));
+        for (int i = 0; i < essai.length(); i++) {
+            resultat.add(evaluationCaractere(essai,i));
         }
     }
 
@@ -43,22 +42,13 @@ public class Reponse {
     }
 
     // renvoie le statut du caractère
-    private Lettre evaluationCaractere(char carCourant) {
+    private Lettre evaluationCaractere(String essai, int position) {
         Lettre lettre = Lettre.INCORRECTE;
-        if(estPlace(carCourant))
+        if(essai.charAt(position)==motSecret.charAt(position)) {
             lettre = Lettre.PLACEE;
-        else if (estPresent(carCourant))
+        } else if (motSecret.contains(String.valueOf(essai.charAt(position)))) {
             lettre = Lettre.NON_PLACEE;
+        }
         return lettre;
-    }
-
-    // le caractère est présent dans le mot secret
-    private boolean estPresent(char carCourant) {
-        return motSecret.contains(String.valueOf(carCourant));
-    }
-
-    // le caractère est placé dans le mot secret
-    private boolean estPlace(char carCourant) {
-        return motSecret.charAt(position) == carCourant;
     }
 }

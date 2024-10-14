@@ -57,8 +57,8 @@ public class TestPartie {
     @Test
     @DisplayName("lève une erreur quand la partie est terminée")
     void doitLeverErreurQuandJeuTermine(){
-        var partie = Partie.create(JOUEUR, MOT_CORRECT);
-        partie.done();
+        int nbEssaiMax = 5;
+        var partie = Partie.create(JOUEUR, MOT_CORRECT,nbEssaiMax);
         givenPartieEnregistree( partie );
         ResultatPartie result = mastermind.evaluation(JOUEUR, MOT_INCORRECT);
         assertThat(result.isError()).isTrue();
